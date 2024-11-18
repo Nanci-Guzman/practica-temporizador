@@ -1,55 +1,61 @@
+// script.js
 let timer;
-let remainingTime = 0;
+let timeRemaining = 0;
 let isRunning = false;
 
-const display = document.getElementById("display");
 const timeInput = document.getElementById("timeInput");
-const startBtn = document.getElementById("startBtn");
-const pauseBtn = document.getElementById("pauseBtn");
-const resetBtn = document.getElementById("resetBtn");
+const timerDisplay = document.getElementById("timerDisplay");
+const startButton = document.getElementById("startButton");
+const pauseButton = document.getElementById("pauseButton");
+const resetButton = document.getElementById("resetButton");
 
-function formatTime(seconds) {
+function updateDisplay(seconds) {
   const minutes = Math.floor(seconds / 60);
   const secs = seconds % 60;
-  return `${String(minutes).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+  timerDisplay.textContent = `${String(minutes).padStart(2, "0")}:${String(
+    secs
+  ).padStart(2, "0")}`;
 }
 
-function updateDisplay() {
-  display.textContent = formatTime(remainingTime);
-}
-
-startBtn.addEventListener("click", () => {
-  if (isRunning) return;
-
-  const userTime = parseInt(timeInput.value, 10);
-  if (!isNaN(userTime) && userTime > 0 && remainingTime === 0) {
-    remainingTime = userTime;
-    updateDisplay();
+function startTimer() {
+  if (isRunning) return; // Prevenir múltiples timers
+  if (timeRemaining <= 0) {
+    const userTime = parseInt(timeInput.value, 10);
+    if (!userTime || userTime <= 0) return alert("Ingresa un tiempo válido.");
+    timeRemaining = userTime;
+    updateDisplay(timeRemaining);
   }
 
+  isRunning = true;
   timer = setInterval(() => {
-    if (remainingTime > 0) {
-      remainingTime--;
-      updateDisplay();
+    if (timeRemaining > 0) {
+      timeRemaining--;
+      updateDisplay(timeRemaining);
     } else {
       clearInterval(timer);
       isRunning = false;
-      alert("¡Tiempo completado!");
+      alert("¡Tiempo terminado!");
     }
   }, 1000);
+}
 
-  isRunning = true;
-});
-
-pauseBtn.addEventListener("click", () => {
+function pauseTimer() {
   clearInterval(timer);
   isRunning = false;
-});
+}
 
-resetBtn.addEventListener("click", () => {
+function resetTimer() {
   clearInterval(timer);
   isRunning = false;
-  remainingTime = 0;
+  timeRemaining = 0;
   timeInput.value = "";
-  updateDisplay();
-});
+  updateDisplay(0);
+}
+
+// Asociar eventos a los botones
+startButton.addEventListener("click", startTimer);
+pauseButton.addEventListener("click", pauseTimer);
+resetButton.addEventListener("click", resetTimer);
+
+// Mostrar inicialmente 00:00
+updateDisplay(0);
