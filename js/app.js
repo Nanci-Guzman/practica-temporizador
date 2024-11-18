@@ -1,4 +1,4 @@
-// script.js
+// crea una web con un temporizador donde el usuario pueda ingresar un tiempo desde donde comenzará a decrementar el contador. Debe contener los botones , iniciar, pausar y reset.
 let timer;
 let timeRemaining = 0;
 let isRunning = false;
@@ -18,7 +18,7 @@ function updateDisplay(seconds) {
 }
 
 function startTimer() {
-  if (isRunning) return; // Prevenir múltiples timers
+  if (isRunning) return;
   if (timeRemaining <= 0) {
     const userTime = parseInt(timeInput.value, 10);
     if (!userTime || userTime <= 0) return alert("Ingresa un tiempo válido.");
